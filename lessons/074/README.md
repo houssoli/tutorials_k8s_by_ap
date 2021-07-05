@@ -3,8 +3,14 @@
 [YouTube Tutorial]()
 
 ## 1. Create EKS Cluster Using eksctl
+
+- Create EKS cluster
 ```bash
 eksctl create cluster -f eks.yaml
+```
+- Verify that you can connect to the cluster
+```
+kubectl get svc
 ```
 
 ## 2. Deploy Metrics server (YAML)
