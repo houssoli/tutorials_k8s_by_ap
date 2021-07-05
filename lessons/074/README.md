@@ -57,12 +57,25 @@ kubectl apply -f 0-metrics-server
 kubectl get pods -n kube-system
 ```
 
+- List api services
+```bash
+kubectl get apiservice
+```
+- List services in `kube-system` namespace
+```bash
+kubectl get svc -n kube-system
+```
+
 - Access metrics API
 
 ```bash
 kubectl get --raw /apis/metrics.k8s.io/v1beta1 | jq
 ```
 
+- Get metrics for pods using raw command\
+```bash
+kubectl get --raw /apis/metrics.k8s.io/v1beta1/pods | jq
+```
 
 - Use kubectl to get metrics
 ```bash
@@ -71,88 +84,140 @@ kubectl top pods -n kube-system
 
 ## 3. Deploy Metrics server (HELM)
 
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/metrics-server
-https://github.com/bitnami/charts/tree/master/bitnami/metrics-server
+- Find default values for metrics-server [chart](https://github.com/bitnami/charts/tree/master/bitnami/metrics-server)
+- Create `values.yaml` file
+- Add `bitnami` helm repo
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+```
+
+- Search for `metrics-server`
+```bash
+helm search repo metrics-server --max-col-width 23
+```
+
+- Install `metrics-server` Helm Chart
+```bash
+helm install metrics bitnami/metrics-server \
+--namespace kube-system \
+--version 5.8.13 \
+--values values.yaml
+```
 
 ## 3. Install Vertical Pod Autoscaler
 
-## 4. Upgrade LibreSSL on Mac/OS X
-
-## 5. Install Vertical Pod Autoscaler (Continue)
-
-## 6. Demo
-
-## 7. Conclusion
+- Open Autoscaler GitHub [page](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler)
 
 - Clone VPA repo
-```
+```bash
 git clone https://github.com/kubernetes/autoscaler.git
 ```
 - Change directory
-```
+```bash
 cd autoscaler/vertical-pod-autoscaler
 ```
 - Preview installation
-```
+```bash
 ./hack/vpa-process-yamls.sh print
 ```
 - Install VPA
-```
+```bash
 ./hack/vpa-up.sh
 ```
 
-- Get error
-- Get verion of openssl
-- Explain the openssl is an alias for libressl
-- Upgrade LibreSSL on mac
-- Explain why LibreSSL is better
+- Tear down VPA
+```bash
+./hack/vpa-down.sh
 ```
+
+## 4. Upgrade LibreSSL on Mac/OS X
+
+- Get OpenSSL version
+```bash
 openssl version
 ```
-```
-which openssl
-```
 
-```
-➜  vertical-pod-autoscaler git:(master) which openssl
-/usr/bin/openssl
-➜  vertical-pod-autoscaler git:(master) openssl version -a
-LibreSSL 2.8.3
-built on: date not available
-platform: information not available
-options:  bn(64,64) rc4(ptr,int) des(idx,cisc,16,int) blowfish(idx)
-compiler: information not available
-OPENSSLDIR: "/private/etc/ssl"
-```
-
-```
-brew info openssl
-brew info libressl
+- Upgrade LibreSSL with Homebew
+```bash
 brew install libressl
-/opt/homebrew/opt/libressl/bin/openssl version
-openssl version
-which openssl
-sudo mv /usr/bin/openssl /usr/bin/openssl-default
-sudo ln -s /opt/homebrew/opt/libressl/bin/openssl /usr/bin/openssl
-
-
-
-sudo ln -s /opt/homebrew/opt/libressl/bin/openssl /usr/local/bin/openssl
-
-(/usr/local/opt/libressl/bin/openssl)
-openssl version
-open new tab
-brew remove libressl
-
-But this is known to cause problems with some more recent versions of OSX. Better to just insert a new symlink into /usr/local/bin, which should take precedence on your path over /usr/bin.
 ```
 
-watch kubectl top pods
+- Get OpenSSL version
+```bash
+openssl version
+```
+- Check instalation path of OpenSSL
+```bash
+which openssl
+```
+- Check version of the LibreSSL installed with Homebew
+```bash
+/opt/homebrew/opt/libressl/bin/openssl version
+```
+- Try to create a soft link
+```bash
+sudo ln -s /opt/homebrew/opt/libressl/bin/openssl /usr/bin/openssl
+```
+- Try to rename openssl
+```bash
+sudo mv /usr/bin/openssl /usr/bin/openssl-old
+```
+
+- Create soft link to /usr/local/bin/ which should take precedence on your path over /usr/bin.
+```bash
+sudo ln -s /opt/homebrew/opt/libressl/bin/openssl /usr/local/bin/openssl
+```
+
+- Open new tab and run version command
+```bash
+openssl version
+```
+
+## 5. Install Vertical Pod Autoscaler (Continue)
+
+- Open new tab and change directory
+```bash
+cd Developer/autoscaler/vertical-pod-autoscaler
+```
+
+- Install VPA
+```bash
+./hack/vpa-up.sh
+```
+
+## 6. Demo
+- Create deployment files under `1-demo` directory
+ - `0-deployment.yaml`
+ - `1-vpa.yaml`
+
+- Open two tabs
+```bash
+watch -n 1 -t kubectl top pods
+```
+
+- Deploy sample app
+```bash
+kubectl apply -f 1-demo
+```
+
+- Let's run 5-10 min and in a new tab get VPA
+```bash
+kubectl get vpa
+```
+
+- Describe VPA
+```bash
 kubectl describe vpa hamster-vpa
+```
 
+- Update deployment and reapply
+```bash
+kubectl apply -f 1-demo/0-deployment.yaml
+```
 
-in intro tell that at the end I'll explain how I use it in productuion
+## 7. Conclusion
+
+- Productuion usage
 
 ## Clean Up
 - Delete EKS cluster
@@ -160,4 +225,6 @@ in intro tell that at the end I'll explain how I use it in productuion
 eksctl delete cluster -f eks.yaml
 sudo rm /usr/local/bin/openssl
 brew remove libressl
+helm remove repo bitnami
+rm -rf autoscaler
 ```
