@@ -9,6 +9,22 @@ eksctl create cluster -f eks.yaml
 
 ## 2. Deploy Metrics server (YAML)
 
+- List api services
+```bash
+kubectl get apiservice
+```
+
+- Use kubectl to get metrics
+```bash
+kubectl top pods -n kube-system
+```
+
+- Access metrics API
+
+```bash
+kubectl get --raw /apis/metrics.k8s.io/v1beta1 | jq
+```
+
 - Create deployemnt files under `0-metrics-server` directory
   - `0-service-account.yaml`
   - `1-cluster-roles.yaml`
@@ -24,11 +40,29 @@ eksctl create cluster -f eks.yaml
 kubectl apply -f 0-metrics-server
 ```
 
+- Verify deployment
+
+```bash
+kubectl get pods -n kube-system
+```
+
+- Access metrics API
+
+```bash
+kubectl get --raw /apis/metrics.k8s.io/v1beta1 | jq
+```
+
+
+- Use kubectl to get metrics
+```bash
+kubectl top pods -n kube-system
+```
+
+## 3. Deploy Metrics server (HELM)
+
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/metrics-server
 https://github.com/bitnami/charts/tree/master/bitnami/metrics-server
-
-## 3. Deploy Metrics server (HELM)
 
 ## 3. Install Vertical Pod Autoscaler
 
