@@ -9,6 +9,15 @@ eksctl create cluster -f eks.yaml
 
 ## 2. Deploy Metrics server (YAML)
 
+- Create deployemnt files under `0-metrics-server` directory
+  - `0-service-account.yaml`
+  - `1-cluster-roles.yaml`
+  - `2-role-binding.yaml`
+  - `3-cluster-role-bindings.yaml`
+  - `4-service.yaml`
+  - `5-deployment.yaml`
+  - `6-api-service.yaml`
+
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/metrics-server
 https://github.com/bitnami/charts/tree/master/bitnami/metrics-server
