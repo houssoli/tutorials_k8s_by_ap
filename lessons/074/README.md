@@ -14,6 +14,11 @@ eksctl create cluster -f eks.yaml
 kubectl get apiservice
 ```
 
+- Use grep
+```bash
+kubectl get apiservice | grep metrics
+```
+
 - Use kubectl to get metrics
 ```bash
 kubectl top pods -n kube-system
