@@ -18,6 +18,12 @@ eksctl create cluster -f eks.yaml
   - `5-deployment.yaml`
   - `6-api-service.yaml`
 
+- Apply created filies
+
+```bash
+kubectl apply -f 0-metrics-server
+```
+
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/metrics-server
 https://github.com/bitnami/charts/tree/master/bitnami/metrics-server
