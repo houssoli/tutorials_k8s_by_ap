@@ -7,11 +7,13 @@
 eksctl create cluster -f eks.yaml
 ```
 
-## 2. Deploy Metrics server
+## 2. Deploy Metrics server (YAML)
 
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/metrics-server
 https://github.com/bitnami/charts/tree/master/bitnami/metrics-server
+
+## 3. Deploy Metrics server (HELM)
 
 ## 3. Install Vertical Pod Autoscaler
 
