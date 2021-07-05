@@ -225,6 +225,6 @@ kubectl apply -f 1-demo/0-deployment.yaml
 eksctl delete cluster -f eks.yaml
 sudo rm /usr/local/bin/openssl
 brew remove libressl
-helm remove repo bitnami
-rm -rf autoscaler
+helm repo remove bitnami
+rm -rf Developer/autoscaler
 ```
