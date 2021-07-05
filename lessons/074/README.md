@@ -2,8 +2,6 @@
 
 [YouTube Tutorial]()
 
-## Steps
-
 ## 1. Create EKS Cluster Using eksctl
 ```bash
 eksctl create cluster -f eks.yaml
@@ -16,6 +14,14 @@ $ helm install my-release bitnami/metrics-server
 https://github.com/bitnami/charts/tree/master/bitnami/metrics-server
 
 ## 3. Install Vertical Pod Autoscaler
+
+## 4. Upgrade LibreSSL on Mac/OS X
+
+## 5. Install Vertical Pod Autoscaler (Continue)
+
+## 6. Demo
+
+## 7. Conclusion
 
 - Clone VPA repo
 ```
@@ -84,8 +90,12 @@ watch kubectl top pods
 kubectl describe vpa hamster-vpa
 
 
+in intro tell that at the end I'll explain how I use it in productuion
+
 ## Clean Up
 - Delete EKS cluster
 ```
 eksctl delete cluster -f eks.yaml
+sudo rm /usr/local/bin/openssl
+brew remove libressl
 ```
