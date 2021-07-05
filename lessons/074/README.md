@@ -14,7 +14,7 @@ eksctl create cluster -f eks.yaml
 kubectl get apiservice
 ```
 
-- Use grep
+- Use grep and filter by `metrics`
 ```bash
 kubectl get apiservice | grep metrics
 ```
